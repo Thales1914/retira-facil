@@ -1,7 +1,6 @@
-// src/controllers/ProductController.js
+
 import ProductModel from '../models/ProductModel';
 
-// Dados simulados movidos para dentro do Controller, temporariamente.
 const MOCK_PRODUCTS_DATA = [
   {
     id: 'a1b2c3d4-1',
@@ -47,7 +46,7 @@ class ProductController {
       setTimeout(() => {
         const products = MOCK_PRODUCTS_DATA.map(data => new ProductModel(data));
         resolve(products);
-      }, 100); // Delay curto para simular carregamento
+      }, 100); 
     });
   }
 }

@@ -1,4 +1,4 @@
-// src/pages/Cliente/Checkout/Confirmacao.js
+
 import React from 'react';
 
 function Confirmacao() {

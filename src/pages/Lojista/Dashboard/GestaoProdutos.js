@@ -1,4 +1,4 @@
-// src/pages/Lojista/Dashboard/GestaoProdutos.js
+
 import React from 'react';
 
 function GestaoProdutos() {

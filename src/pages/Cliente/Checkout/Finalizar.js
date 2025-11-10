@@ -1,13 +1,11 @@
-// src/pages/Cliente/Checkout/Finalizar.js
+
 import React, { useState } from 'react';
 
-// Mock de dados de agendamento selecionado
 const mockSelectedSlot = {
   day: 'Quinta-Feira, 6 de Novembro',
   time: '14:00'
 };
 
-// Mock de dados do carrinho para o resumo
 const mockCartSummary = {
     total: 219.90,
     items: [
@@ -30,14 +28,10 @@ function Finalizar() {
   const handleSubmit = (e) => {
     e.preventDefault();
     console.log("Pedido Finalizado com Dados:", formData, "e Agendamento:", mockSelectedSlot);
-    // Lógica futura: chamar OrderController para registrar o pedido no sistema do lojista (RF-4)
-    // Redirecionar para a tela de Confirmação
-    // history.push('/confirmacao');
   };
 
   return (
     <div className="finalizar-page">
-      {/* Cabeçalho "Voltar" e Título */}
       <header className="page-header-simple">
         <button onClick={() => window.history.back()} className="back-button">← Voltar</button>
         <h1 className="page-title">Finalizar</h1>
@@ -46,7 +40,6 @@ function Finalizar() {
       <main className="finalizar-main-content">
         <form onSubmit={handleSubmit} className="checkout-form">
           
-          {/* Seção 1: Seus dados */}
           <div className="data-card">
             <h2 className="card-title">Seus dados</h2>
             <div className="form-group">
@@ -63,7 +56,6 @@ function Finalizar() {
             </div>
           </div>
           
-          {/* Seção 2: Retirada (Data e Horário) */}
           <div className="data-card">
             <h2 className="card-title">Retirada</h2>
             <div className="summary-info">
@@ -72,7 +64,6 @@ function Finalizar() {
             </div>
           </div>
           
-          {/* Seção 3: Resumo do Pedido e Total */}
           <div className="data-card">
             <h2 className="card-title">Resumo do Pedido</h2>
             <ul className="order-list">
@@ -86,7 +77,6 @@ function Finalizar() {
             </div>
           </div>
           
-          {/* Botão de Conclusão */}
           <button type="submit" className="btn-finalizar-reserva">
             Confirmar Reserva (Pagamento na Retirada)
           </button>

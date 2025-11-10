@@ -1,9 +1,8 @@
-// src/pages/Cliente/Carrinho/Carrinho.js
+
 import React from 'react';
 import CartItem from '../../../components/Cliente/CartItem';
-import ProductModel from '../../../models/ProductModel'; // Para simular os dados do produto
+import ProductModel from '../../../models/ProductModel';
 
-// Mock Simples para o visual do carrinho
 const mockCartData = [
   {
     product: new ProductModel({
@@ -24,7 +23,6 @@ function Carrinho() {
 
   return (
     <div className="carrinho-page">
-      {/* Cabeçalho "Voltar" e "Carrinho" */}
       <header className="page-header-simple">
         <button onClick={() => window.history.back()} className="back-button">← Voltar</button>
         <h1 className="page-title">Carrinho</h1>
@@ -34,8 +32,7 @@ function Carrinho() {
         {mockCartData.map((item, index) => (
           <CartItem key={index} item={item} />
         ))}
-        
-        {/* Seção de Total e Botão Continuar */}
+
         <div className="carrinho-summary-fixed">
           <div className="total-bar">
             <span className="total-label">Total</span>

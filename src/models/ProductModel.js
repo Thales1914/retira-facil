@@ -1,13 +1,13 @@
-// src/models/ProductModel.js
+
 class ProductModel {
   constructor(data) {
     this.id = data.id;
     this.nome = data.nome;
     this.categoria = data.categoria;
-    this.preco = data.preco; // numeric(10,2)
-    this.estoque = data.estoque; // integer
+    this.preco = data.preco; 
+    this.estoque = data.estoque;
     this.descricao = data.descricao;
-    this.imageUrl = data.imageUrl; // Adicionado para a View
+    this.imageUrl = data.imageUrl; 
   }
 
   getFormattedPrice() {
