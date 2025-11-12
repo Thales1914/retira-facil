@@ -1,6 +1,12 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import './index.css';
+
+// --- ESTAS SÃO AS IMPORTAÇÕES IMPORTANTES ---
+import 'bootstrap/dist/css/bootstrap.min.css'; // O CSS do Layout
+import 'bootstrap-icons/font/bootstrap-icons.css'; // <--- ADICIONE ESTA LINHA (Os Ícones)
+// -------------------------------------------
+
+import './index.css'; // O nosso CSS bonitão
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 
@@ -11,7 +17,4 @@ root.render(
   </React.StrictMode>
 );
 
-// If you want to start measuring performance in your app, pass a function
-// to log results (for example: reportWebVitals(console.log))
-// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
 reportWebVitals();

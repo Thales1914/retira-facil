@@ -1,73 +1,93 @@
-
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 const mockSlots = [
-  { day: 'Quinta-Feira, 6 de Novembro', slots: [
-    { time: '09:00', capacity: 3, available: true }, 
-    { time: '11:00', capacity: 2, available: true }, 
-    { time: '14:00', capacity: 4, available: true }, 
-    { time: '16:00', capacity: 5, available: true }, 
+  { day: 'Quinta-Feira, 14/11', slots: [
+    { time: '09:00', available: true }, 
+    { time: '10:00', available: false }, // Exemplo de horário lotado
+    { time: '14:00', available: true }, 
+    { time: '16:00', available: true }, 
   ]},
-  { day: 'Sexta-Feira, 7 de Novembro', slots: [
-    { time: '09:00', capacity: 5, available: true }, 
-    { time: '11:00', capacity: 4, available: true }, 
-    { time: '14:00', capacity: 5, available: true }, 
-    { time: '16:00', capacity: 3, available: true }, 
+  { day: 'Sexta-Feira, 15/11', slots: [
+    { time: '09:00', available: true }, 
+    { time: '11:00', available: true }, 
+    { time: '14:00', available: true }, 
   ]}
 ];
 
 function Agendamento() {
   const [selectedSlot, setSelectedSlot] = useState(null);
-
-  const handleSlotSelect = (day, time) => {
-    setSelectedSlot({ day, time });
-    console.log(`Horário selecionado: ${day} às ${time}`);
-  };
+  const navigate = useNavigate();
 
   const handleContinue = () => {
     if (selectedSlot) {
-        console.log("Continuar para Finalizar com agendamento:", selectedSlot);
+      // AQUI É O PULO DO GATO:
+      // Navegamos para a próxima tela levando o objeto 'selectedSlot' na bagagem (state)
+      navigate('/finalizar', { state: { agendamento: selectedSlot } });
     }
   };
 
   return (
-    <div className="agendamento-page">
-      <header className="page-header-simple">
-        <button onClick={() => window.history.back()} className="back-button">← Voltar</button>
-        <h1 className="page-title">Escolha o horário</h1>
-        <p className="page-subtitle">Selecione quando deseja retirar</p>
-      </header>
+    <div className="bg-light min-vh-100 pb-5">
+      <div className="bg-white shadow-sm py-3 mb-4">
+        <div className="container">
+          <button onClick={() => navigate(-1)} className="btn btn-outline-secondary btn-sm border-0">
+            ← Voltar
+          </button>
+          <h4 className="mt-2 fw-bold">Escolha o horário de retirada</h4>
+        </div>
+      </div>
 
-      <main className="agendamento-main-content">
-        {mockSlots.map(dayGroup => (
-          <div key={dayGroup.day} className="day-group">
-            <h2 className="day-title">{dayGroup.day}</h2>
-            <div className="slots-grid">
-              {dayGroup.slots.map(slot => (
-                <div 
-                  key={slot.time}
-                  className={`slot-card ${selectedSlot?.day === dayGroup.day && selectedSlot?.time === slot.time ? 'selected' : ''} ${!slot.available ? 'disabled' : ''}`}
-                  onClick={() => slot.available && handleSlotSelect(dayGroup.day, slot.time)}
-                >
-                  <p className="slot-time">{slot.time}</p>
-                  <p className="slot-capacity">{slot.capacity} vagas</p>
-                </div>
-              ))}
+      <div className="container" style={{ maxWidth: '800px' }}>
+        {mockSlots.map((dayGroup, index) => (
+          <div key={index} className="card mb-4 border-0 shadow-sm">
+            <div className="card-header bg-white fw-bold text-uppercase text-muted">
+              📅 {dayGroup.day}
+            </div>
+            <div className="card-body">
+              <div className="d-flex flex-wrap gap-2">
+                {dayGroup.slots.map((slot) => {
+                  const isSelected = selectedSlot?.day === dayGroup.day && selectedSlot?.time === slot.time;
+                  
+                  return (
+                    <button
+                      key={slot.time}
+                      disabled={!slot.available}
+                      onClick={() => setSelectedSlot({ day: dayGroup.day, time: slot.time })}
+                      className={`btn ${isSelected ? 'btn-primary' : 'btn-outline-secondary'} 
+                        ${!slot.available ? 'opacity-50' : ''} px-4 py-2`}
+                    >
+                      {slot.time}
+                      {!slot.available && <small className="d-block" style={{fontSize: '0.6rem'}}>Esgotado</small>}
+                    </button>
+                  );
+                })}
+              </div>
             </div>
           </div>
         ))}
-      </main>
-      
-      <footer className="agendamento-footer">
-        {selectedSlot && (
-          <button 
-            className="btn-confirm-agendamento" 
-            onClick={handleContinue}
-          >
-            Continuar para Finalizar
-          </button>
-        )}
-      </footer>
+
+        {/* Rodapé Fixo com Botão Continuar */}
+        <div className="fixed-bottom bg-white p-3 shadow border-top">
+          <div className="container" style={{ maxWidth: '800px' }}>
+            <div className="d-flex justify-content-between align-items-center">
+              <div>
+                <small className="text-muted">Horário selecionado:</small>
+                <div className="fw-bold text-primary">
+                  {selectedSlot ? `${selectedSlot.day} às ${selectedSlot.time}` : 'Nenhum selecionado'}
+                </div>
+              </div>
+              <button 
+                className="btn btn-success btn-lg px-5" 
+                disabled={!selectedSlot}
+                onClick={handleContinue}
+              >
+                Continuar
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   );
 }

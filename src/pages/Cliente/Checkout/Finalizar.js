@@ -1,25 +1,33 @@
-
-import React, { useState } from 'react';
-
-const mockSelectedSlot = {
-  day: 'Quinta-Feira, 6 de Novembro',
-  time: '14:00'
-};
-
-const mockCartSummary = {
-    total: 219.90,
-    items: [
-        { name: 'Mochila Escolar', quantity: 1, price: 129.90 },
-        { name: 'Kit Cadernos', quantity: 2, price: 45.00 * 2 }
-    ]
-};
+import React, { useState, useEffect } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
+import CartController from '../../../controllers/CartController';
 
 function Finalizar() {
-  const [formData, setFormData] = useState({
-    nome: '',
-    matricula: '',
-    email: ''
-  });
+  const location = useLocation();
+  const navigate = useNavigate();
+  
+  // Recupera o agendamento que veio da tela anterior
+  const agendamento = location.state?.agendamento;
+
+  const [cartItems, setCartItems] = useState([]);
+  const [total, setTotal] = useState(0);
+  const [formData, setFormData] = useState({ nome: '', matricula: '', email: '' });
+
+  // Se o usuário tentar entrar direto pelo link sem agendar, joga ele de volta
+  useEffect(() => {
+    if (!agendamento) {
+      alert("Por favor, selecione um horário antes.");
+      navigate('/agendamento');
+      return;
+    }
+
+    // Carrega o carrinho REAL
+    CartController.getCart().then(items => {
+      setCartItems(items);
+      const sum = items.reduce((acc, item) => acc + (item.product.preco * item.quantity), 0);
+      setTotal(sum);
+    });
+  }, [agendamento, navigate]);
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -27,61 +35,92 @@ function Finalizar() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log("Pedido Finalizado com Dados:", formData, "e Agendamento:", mockSelectedSlot);
+    // Aqui você mandaria para o Back-end
+    console.log("PEDIDO FEITO!", { usuario: formData, itens: cartItems, agendamento });
+    
+    // Vamos criar uma função de limpar carrinho no próximo passo, 
+    // por enquanto vamos só navegar para o sucesso
+    navigate('/confirmacao');
   };
 
   return (
-    <div className="finalizar-page">
-      <header className="page-header-simple">
-        <button onClick={() => window.history.back()} className="back-button">← Voltar</button>
-        <h1 className="page-title">Finalizar</h1>
-      </header>
+    <div className="bg-light min-vh-100 pb-5">
+      <div className="bg-white shadow-sm py-3 mb-4">
+        <div className="container">
+            <button onClick={() => navigate(-1)} className="btn btn-link text-decoration-none p-0">← Voltar</button>
+            <h4 className="fw-bold mt-1">Finalizar Retirada</h4>
+        </div>
+      </div>
 
-      <main className="finalizar-main-content">
-        <form onSubmit={handleSubmit} className="checkout-form">
+      <div className="container" style={{ maxWidth: '900px' }}>
+        <div className="row">
           
-          <div className="data-card">
-            <h2 className="card-title">Seus dados</h2>
-            <div className="form-group">
-              <label htmlFor="nome">Nome do Aluno</label>
-              <input type="text" id="nome" name="nome" placeholder="Nome completo do aluno" value={formData.nome} onChange={handleChange} required />
+          {/* Coluna Esquerda: Formulário */}
+          <div className="col-md-7 mb-4">
+            <div className="card border-0 shadow-sm">
+              <div className="card-header bg-white fw-bold text-primary">👤 Dados do Aluno</div>
+              <div className="card-body">
+                <form id="checkoutForm" onSubmit={handleSubmit}>
+                  <div className="mb-3">
+                    <label className="form-label">Nome Completo</label>
+                    <input type="text" name="nome" className="form-control" required onChange={handleChange} />
+                  </div>
+                  <div className="mb-3">
+                    <label className="form-label">Matrícula</label>
+                    <input type="text" name="matricula" className="form-control" required onChange={handleChange} />
+                  </div>
+                  <div className="mb-3">
+                    <label className="form-label">E-mail do Responsável</label>
+                    <input type="email" name="email" className="form-control" required onChange={handleChange} />
+                  </div>
+                </form>
+              </div>
             </div>
-            <div className="form-group">
-              <label htmlFor="matricula">Matrícula</label>
-              <input type="text" id="matricula" name="matricula" placeholder="Número de matrícula" value={formData.matricula} onChange={handleChange} required />
-            </div>
-            <div className="form-group">
-              <label htmlFor="email">E-mail do Responsável</label>
-              <input type="email" id="email" name="email" placeholder="responsavel@email.com" value={formData.email} onChange={handleChange} required />
+
+            <div className="card border-0 shadow-sm mt-3">
+              <div className="card-header bg-white fw-bold text-primary">📅 Retirada Agendada</div>
+              <div className="card-body d-flex align-items-center">
+                 <div className="fs-1 me-3">📆</div>
+                 <div>
+                    <h5 className="mb-0">{agendamento?.day}</h5>
+                    <p className="text-muted mb-0">Horário: <strong className="text-dark">{agendamento?.time}</strong></p>
+                 </div>
+              </div>
             </div>
           </div>
-          
-          <div className="data-card">
-            <h2 className="card-title">Retirada</h2>
-            <div className="summary-info">
-              <p className="summary-label">Data e horário</p>
-              <p className="summary-value">{mockSelectedSlot.day} Às {mockSelectedSlot.time}</p>
+
+          {/* Coluna Direita: Resumo da Conta */}
+          <div className="col-md-5">
+            <div className="card border-0 shadow-sm">
+              <div className="card-header bg-white fw-bold">Resumo do Pedido</div>
+              <div className="card-body p-0">
+                <ul className="list-group list-group-flush">
+                  {cartItems.map((item, idx) => (
+                    <li key={idx} className="list-group-item d-flex justify-content-between align-items-center">
+                      <div>
+                        <small className="d-block fw-bold">{item.product.nome}</small>
+                        <small className="text-muted">x{item.quantity}</small>
+                      </div>
+                      <span>R$ {(item.product.preco * item.quantity).toFixed(2).replace('.', ',')}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+              <div className="card-footer bg-light">
+                <div className="d-flex justify-content-between align-items-center mb-3">
+                  <span className="fw-bold">Total a Pagar</span>
+                  <span className="fs-4 fw-bold text-success">R$ {total.toFixed(2).replace('.', ',')}</span>
+                </div>
+                <button type="submit" form="checkoutForm" className="btn btn-primary w-100 py-2 fw-bold">
+                  Confirmar Reserva
+                </button>
+                <small className="text-muted text-center d-block mt-2">Pagamento realizado no ato da retirada.</small>
+              </div>
             </div>
           </div>
-          
-          <div className="data-card">
-            <h2 className="card-title">Resumo do Pedido</h2>
-            <ul className="order-list">
-                {mockCartSummary.items.map((item, index) => (
-                    <li key={index}>{item.quantity}x {item.name} - R$ {item.price.toFixed(2).replace('.', ',')}</li>
-                ))}
-            </ul>
-            <div className="total-summary">
-                <span className="total-label">Total a Pagar</span>
-                <span className="total-amount">R$ {mockCartSummary.total.toFixed(2).replace('.', ',')}</span>
-            </div>
-          </div>
-          
-          <button type="submit" className="btn-finalizar-reserva">
-            Confirmar Reserva (Pagamento na Retirada)
-          </button>
-        </form>
-      </main>
+
+        </div>
+      </div>
     </div>
   );
 }

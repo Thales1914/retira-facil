@@ -1,46 +1,111 @@
-
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import CartItem from '../../../components/Cliente/CartItem';
-import ProductModel from '../../../models/ProductModel';
-
-const mockCartData = [
-  {
-    product: new ProductModel({
-      id: 'a1b2c3d4-1',
-      nome: 'Mochila Escolar',
-      categoria: 'Acessórios',
-      preco: 129.90,
-      estoque: 24,
-      imageUrl: '/assets/images/mochila.jpg'
-    }),
-    quantity: 1,
-    totalPrice: 129.90,
-  }
-];
+import CartController from '../../../controllers/CartController';
 
 function Carrinho() {
-  const total = mockCartData.reduce((sum, item) => sum + item.totalPrice, 0);
+  const [cartItems, setCartItems] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  // Função para recarregar dados (usada após qualquer alteração)
+  const refreshCart = () => {
+    CartController.getCart().then(items => {
+      setCartItems(items);
+      setLoading(false);
+    });
+  };
+
+  useEffect(() => {
+    refreshCart();
+  }, []);
+
+  // Lógica chamada pelos botões do filho (CartItem)
+  const handleUpdateQuantity = async (productId, delta) => {
+    await CartController.updateQuantity(productId, delta);
+    refreshCart(); // Atualiza a tela
+  };
+
+  const handleRemoveItem = async (productId) => {
+    await CartController.removeItem(productId);
+    refreshCart(); // Atualiza a tela
+  };
+
+  // Calcula total
+  const totalGeral = cartItems.reduce((acc, item) => {
+    return acc + (item.product.preco * item.quantity);
+  }, 0);
 
   return (
-    <div className="carrinho-page">
-      <header className="page-header-simple">
-        <button onClick={() => window.history.back()} className="back-button">← Voltar</button>
-        <h1 className="page-title">Carrinho</h1>
-      </header>
-
-      <main className="carrinho-main-content">
-        {mockCartData.map((item, index) => (
-          <CartItem key={index} item={item} />
-        ))}
-
-        <div className="carrinho-summary-fixed">
-          <div className="total-bar">
-            <span className="total-label">Total</span>
-            <span className="total-amount">R$ {total.toFixed(2).replace('.', ',')}</span>
-          </div>
-          <button className="btn-continue">Continuar</button>
+    <div className="bg-light min-vh-100 pb-5">
+      
+      {/* Header Moderno */}
+      <div className="bg-white shadow-sm py-4 mb-4">
+        <div className="container d-flex align-items-center">
+          <Link to="/" className="btn btn-light text-primary rounded-circle shadow-sm me-3" style={{width: '40px', height: '40px', display:'flex', alignItems:'center', justifyContent:'center'}}>
+            <i className="bi bi-arrow-left fw-bold"></i>
+          </Link>
+          <h4 className="mb-0 fw-bold font-poppins">Seu Carrinho</h4>
         </div>
-      </main>
+      </div>
+
+      <div className="container">
+        {loading ? (
+          <div className="text-center py-5"><div className="spinner-border text-primary"></div></div>
+        ) : cartItems.length === 0 ? (
+          // Estado Vazio Bonito
+          <div className="text-center py-5 animate-fade-in">
+            <div style={{ fontSize: '4rem' }}>🛒</div>
+            <h3 className="fw-bold mt-3">Seu carrinho está vazio</h3>
+            <p className="text-muted">Parece que você ainda não escolheu nada.</p>
+            <Link to="/" className="btn btn-gradient rounded-pill px-4 mt-3 shadow">
+              Voltar para a Loja
+            </Link>
+          </div>
+        ) : (
+          // Lista
+          <div className="row">
+            <div className="col-lg-8 mb-4">
+              {cartItems.map((item, index) => (
+                <CartItem 
+                  key={index} 
+                  item={item} 
+                  onUpdate={handleUpdateQuantity}
+                  onRemove={handleRemoveItem}
+                />
+              ))}
+            </div>
+
+            {/* Resumo Lateral */}
+            <div className="col-lg-4">
+              <div className="card border-0 shadow-sm p-4 position-sticky" style={{ top: '100px' }}>
+                <h5 className="fw-bold mb-4">Resumo do Pedido</h5>
+                
+                <div className="d-flex justify-content-between mb-2">
+                  <span className="text-muted">Subtotal</span>
+                  <span className="fw-bold">R$ {totalGeral.toFixed(2).replace('.', ',')}</span>
+                </div>
+                <div className="d-flex justify-content-between mb-3">
+                  <span className="text-muted">Taxa de Retirada</span>
+                  <span className="text-success fw-bold">Grátis</span>
+                </div>
+                
+                <hr className="my-3" />
+                
+                <div className="d-flex justify-content-between mb-4 align-items-center">
+                  <span className="fw-bold fs-5">Total</span>
+                  <span className="fw-bold fs-4 text-primary">
+                    R$ {totalGeral.toFixed(2).replace('.', ',')}
+                  </span>
+                </div>
+
+                <Link to="/agendamento" className="btn btn-success w-100 py-3 fw-bold shadow rounded-3">
+                  Agendar Retirada <i className="bi bi-arrow-right ms-2"></i>
+                </Link>
+              </div>
+            </div>
+          </div>
+        )}
+      </div>
     </div>
   );
 }
