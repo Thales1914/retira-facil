@@ -32,7 +32,7 @@ function Vitrine() {
 
   return (
     <div className="bg-light min-vh-100">
-      {/* Navbar */}
+     
       <nav className="navbar navbar-expand-lg navbar-dark bg-primary sticky-top shadow">
         <div className="container">
           <span className="navbar-brand mb-0 h1 fw-bold">
@@ -49,7 +49,7 @@ function Vitrine() {
         </div>
       </nav>
       
-      {/* Header Hero Moderno */}
+  
       <header className="hero-section shadow-sm py-5 text-center">
         <div className="hero-bg-circle" style={{ top: '-50px', left: '-50px' }}></div>
         <div className="hero-bg-circle" style={{ bottom: '-50px', right: '-50px', background: 'var(--secondary-gradient)' }}></div>
@@ -73,7 +73,7 @@ function Vitrine() {
           </div>
         ) : (
           <>
-            {/* --- BARRA DE FILTRO --- */}
+           
             <div className="row mb-3">
               <div className="col-md-6">
                 <div className="d-flex align-items-center">
@@ -95,7 +95,7 @@ function Vitrine() {
                 </div>
               </div>
             </div>
-            {/* ------------------------------------------ */}
+       
 
             <div className="row">
               {produtosFiltrados.map(product => (

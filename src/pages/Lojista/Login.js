@@ -1,6 +1,4 @@
-// src/pages/Lojista/Login.js
 import React from 'react';
-
 function Login() {
   return (
     <div>

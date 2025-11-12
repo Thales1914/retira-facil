@@ -1,10 +1,10 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 
-// --- ESTAS SÃO AS IMPORTAÇÕES IMPORTANTES ---
-import 'bootstrap/dist/css/bootstrap.min.css'; // O CSS do Layout
-import 'bootstrap-icons/font/bootstrap-icons.css'; // <--- ADICIONE ESTA LINHA (Os Ícones)
-// -------------------------------------------
+
+import 'bootstrap/dist/css/bootstrap.min.css'; 
+import 'bootstrap-icons/font/bootstrap-icons.css'; 
+
 
 import './index.css'; // O nosso CSS bonitão
 import App from './App';

@@ -1,4 +1,3 @@
-/* Importando Fonte Moderna (Poppins) */
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap');
 
 :root {
@@ -15,7 +14,7 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
-/* --- Animações --- */
+
 @keyframes fadeInUp {
   from {
     opacity: 0;
@@ -33,26 +32,24 @@ body {
   100% { transform: translateY(0px); }
 }
 
-/* Classe para animar entrada dos elementos */
+
 .animate-fade-in {
   animation: fadeInUp 0.6s ease-out forwards;
 }
 
-/* Atraso cascata para itens (para um aparecer depois do outro) */
+
 .delay-1 { animation-delay: 0.1s; }
 .delay-2 { animation-delay: 0.2s; }
 .delay-3 { animation-delay: 0.3s; }
 
-/* --- Componentes Customizados --- */
 
-/* Navbar com Blur (Efeito vidro) */
 .navbar-glass {
   background: rgba(37, 99, 235, 0.95) !important;
   backdrop-filter: blur(10px);
   box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
 }
 
-/* Banner Hero */
+
 .hero-section {
   background: white;
   border-radius: 0 0 2rem 2rem;
@@ -71,7 +68,6 @@ body {
   z-index: 0;
 }
 
-/* Cards de Produto */
 .product-card-modern {
   border: none;
   border-radius: 1rem;
@@ -102,10 +98,7 @@ body {
 }
 
 .product-card-modern:hover .product-image-modern {
-  transform: scale(1.1) rotate(-2deg); /* Efeito de zoom e leve rotação */
-}
-
-/* Botões com Gradiente */
+  transform: scale(1.1) rotate(-2deg); }
 .btn-gradient {
   background: var(--primary-gradient);
   border: none;

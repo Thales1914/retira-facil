@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 const mockSlots = [
   { day: 'Quinta-Feira, 14/11', slots: [
     { time: '09:00', available: true }, 
-    { time: '10:00', available: false }, // Exemplo de horário lotado
+    { time: '10:00', available: false }, 
     { time: '14:00', available: true }, 
     { time: '16:00', available: true }, 
   ]},
@@ -21,7 +21,7 @@ function Agendamento() {
 
   const handleContinue = () => {
     if (selectedSlot) {
-      // AQUI É O PULO DO GATO:
+      // AQUI É ONDE NEGO VACILA:
       // Navegamos para a próxima tela levando o objeto 'selectedSlot' na bagagem (state)
       navigate('/finalizar', { state: { agendamento: selectedSlot } });
     }
@@ -67,7 +67,7 @@ function Agendamento() {
           </div>
         ))}
 
-        {/* Rodapé Fixo com Botão Continuar */}
+        
         <div className="fixed-bottom bg-white p-3 shadow border-top">
           <div className="container" style={{ maxWidth: '800px' }}>
             <div className="d-flex justify-content-between align-items-center">
