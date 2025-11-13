@@ -26,17 +26,17 @@ function Vitrine() {
 
   const categoriasDisponiveis = ['Todos', ...new Set(products.map(p => p.categoria))];
 
-  const produtosFiltrados = filtroCategoria === 'Todos' 
-    ? products 
+  const produtosFiltrados = filtroCategoria === 'Todos'
+    ? products
     : products.filter(p => p.categoria === filtroCategoria);
 
   return (
     <div className="bg-light min-vh-100">
-      {/* Navbar */}
+
       <nav className="navbar navbar-expand-lg navbar-dark bg-primary sticky-top shadow">
         <div className="container">
           <span className="navbar-brand mb-0 h1 fw-bold">
-             🎓 Retira Fácil
+            🎓 Retira Fácil
           </span>
           <div className="d-flex">
             <Link to="/carrinho" className="btn btn-light text-primary fw-bold rounded-pill position-relative">
@@ -48,12 +48,12 @@ function Vitrine() {
           </div>
         </div>
       </nav>
-      
-      {/* Header Hero Moderno */}
+
+
       <header className="hero-section shadow-sm py-5 text-center">
         <div className="hero-bg-circle" style={{ top: '-50px', left: '-50px' }}></div>
         <div className="hero-bg-circle" style={{ bottom: '-50px', right: '-50px', background: 'var(--secondary-gradient)' }}></div>
-        
+
         <div className="container position-relative animate-fade-in">
           <h1 className="display-4 fw-bold text-dark mb-2">
             Uniforme <span className="text-primary">Escolar</span>
@@ -73,29 +73,29 @@ function Vitrine() {
           </div>
         ) : (
           <>
-            {/* --- BARRA DE FILTRO --- */}
+
             <div className="row mb-3">
               <div className="col-md-6">
                 <div className="d-flex align-items-center">
-                   <span className="me-2 fw-bold text-muted"><i className="bi bi-funnel-fill"></i> Categoria:</span>
-                   
-                   {              }
-                   <select 
-                      className="form-select form-select-sm shadow-sm" 
-                      style={{ maxWidth: '200px', cursor: 'pointer' }}
-                      value={filtroCategoria} 
-                      onChange={(e) => setFiltroCategoria(e.target.value)}
-                    >
-                      {categoriasDisponiveis.map(cat => (
-                        <option key={cat} value={cat}>
-                          {cat.toUpperCase()}
-                        </option>
-                      ))}
-                    </select>
+                  <span className="me-2 fw-bold text-muted"><i className="bi bi-funnel-fill"></i> Categoria:</span>
+
+                  { }
+                  <select
+                    className="form-select form-select-sm shadow-sm"
+                    style={{ maxWidth: '200px', cursor: 'pointer' }}
+                    value={filtroCategoria}
+                    onChange={(e) => setFiltroCategoria(e.target.value)}
+                  >
+                    {categoriasDisponiveis.map(cat => (
+                      <option key={cat} value={cat}>
+                        {cat.toUpperCase()}
+                      </option>
+                    ))}
+                  </select>
                 </div>
               </div>
             </div>
-            {/* ------------------------------------------ */}
+
 
             <div className="row">
               {produtosFiltrados.map(product => (
@@ -105,11 +105,11 @@ function Vitrine() {
                   onAdd={handleAddToCart}
                 />
               ))}
-              
+
               {produtosFiltrados.length === 0 && (
-                 <div className="col-12 text-center text-muted mt-5">
-                   <p>Nenhum produto encontrado nesta categoria.</p>
-                 </div>
+                <div className="col-12 text-center text-muted mt-5">
+                  <p>Nenhum produto encontrado nesta categoria.</p>
+                </div>
               )}
             </div>
           </>

@@ -1,12 +1,12 @@
 import React from 'react';
-import Swal from 'sweetalert2'; // Importando o alerta bonito
+import Swal from 'sweetalert2'; 
 
 function CartItem({ item, onUpdate, onRemove }) {
   const { product, quantity } = item; 
   
   const totalString = item.getFormattedTotalPrice ? item.getFormattedTotalPrice() : `R$ 0,00`;
 
-  // Função para confirmar exclusão
+  
   const handleRemoveClick = () => {
     Swal.fire({
       title: 'Remover item?',
@@ -29,7 +29,7 @@ function CartItem({ item, onUpdate, onRemove }) {
     <div className="card mb-3 border-0 shadow-sm animate-fade-in">
       <div className="row g-0 align-items-center p-2">
         
-        {/* Imagem Pequena */}
+     
         <div className="col-3 col-md-2">
           <div className="bg-light rounded d-flex align-items-center justify-content-center" style={{ height: '80px' }}>
              <img 
@@ -44,16 +44,16 @@ function CartItem({ item, onUpdate, onRemove }) {
         <div className="col-9 col-md-10 ps-3">
           <div className="d-flex flex-column flex-md-row justify-content-between align-items-md-center">
             
-            {/* Nome */}
+          
             <div className="mb-2 mb-md-0 flex-grow-1">
               <h6 className="mb-0 fw-bold text-dark">{product.nome}</h6>
               <small className="text-muted">{product.getFormattedPrice()} un.</small>
             </div>
 
-            {/* Controles */}
+           
             <div className="d-flex align-items-center justify-content-between gap-3">
               
-              {/* Botões + e - */}
+            
               <div className="btn-group btn-group-sm shadow-sm" role="group">
                 <button 
                   className="btn btn-outline-secondary fw-bold" 
@@ -69,12 +69,12 @@ function CartItem({ item, onUpdate, onRemove }) {
                 >+</button>
               </div>
 
-              {/* Preço Total */}
+             
               <span className="fw-bold text-primary" style={{ minWidth: '80px', textAlign: 'right' }}>
                 {totalString}
               </span>
               
-              {/* Lixeira */}
+          
               <button 
                 className="btn btn-link text-danger p-0 ms-2" 
                 onClick={handleRemoveClick}

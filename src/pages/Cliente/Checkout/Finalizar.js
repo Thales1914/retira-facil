@@ -6,14 +6,14 @@ function Finalizar() {
   const location = useLocation();
   const navigate = useNavigate();
   
-  // Recupera o agendamento que veio da tela anterior
+  
   const agendamento = location.state?.agendamento;
 
   const [cartItems, setCartItems] = useState([]);
   const [total, setTotal] = useState(0);
   const [formData, setFormData] = useState({ nome: '', matricula: '', email: '' });
 
-  // Se o usuário tentar entrar direto pelo link sem agendar, joga ele de volta
+  
   useEffect(() => {
     if (!agendamento) {
       alert("Por favor, selecione um horário antes.");

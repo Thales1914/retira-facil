@@ -7,7 +7,7 @@ function Carrinho() {
   const [cartItems, setCartItems] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  // Função para recarregar dados (usada após qualquer alteração)
+  //recarregar dados
   const refreshCart = () => {
     CartController.getCart().then(items => {
       setCartItems(items);
@@ -19,18 +19,18 @@ function Carrinho() {
     refreshCart();
   }, []);
 
-  // Lógica chamada pelos botões do filho (CartItem)
+  //CartItem
   const handleUpdateQuantity = async (productId, delta) => {
     await CartController.updateQuantity(productId, delta);
-    refreshCart(); // Atualiza a tela
+    refreshCart();
   };
 
   const handleRemoveItem = async (productId) => {
     await CartController.removeItem(productId);
-    refreshCart(); // Atualiza a tela
+    refreshCart();
   };
 
-  // Calcula total
+  
   const totalGeral = cartItems.reduce((acc, item) => {
     return acc + (item.product.preco * item.quantity);
   }, 0);
@@ -38,7 +38,7 @@ function Carrinho() {
   return (
     <div className="bg-light min-vh-100 pb-5">
       
-      {/* Header Moderno */}
+     
       <div className="bg-white shadow-sm py-4 mb-4">
         <div className="container d-flex align-items-center">
           <Link to="/" className="btn btn-light text-primary rounded-circle shadow-sm me-3" style={{width: '40px', height: '40px', display:'flex', alignItems:'center', justifyContent:'center'}}>
@@ -52,7 +52,7 @@ function Carrinho() {
         {loading ? (
           <div className="text-center py-5"><div className="spinner-border text-primary"></div></div>
         ) : cartItems.length === 0 ? (
-          // Estado Vazio Bonito
+         
           <div className="text-center py-5 animate-fade-in">
             <div style={{ fontSize: '4rem' }}>🛒</div>
             <h3 className="fw-bold mt-3">Seu carrinho está vazio</h3>
@@ -62,7 +62,7 @@ function Carrinho() {
             </Link>
           </div>
         ) : (
-          // Lista
+       
           <div className="row">
             <div className="col-lg-8 mb-4">
               {cartItems.map((item, index) => (
@@ -75,7 +75,6 @@ function Carrinho() {
               ))}
             </div>
 
-            {/* Resumo Lateral */}
             <div className="col-lg-4">
               <div className="card border-0 shadow-sm p-4 position-sticky" style={{ top: '100px' }}>
                 <h5 className="fw-bold mb-4">Resumo do Pedido</h5>

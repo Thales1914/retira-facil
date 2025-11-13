@@ -4,7 +4,7 @@ import CartController from '../../../controllers/CartController';
 
 function Confirmacao() {
   
-  // Assim que abrir a tela de sucesso, limpamos o carrinho
+
   useEffect(() => {
     CartController.clearCart();
   }, []);
