@@ -49,7 +49,6 @@ function Vitrine() {
         </div>
       </nav>
 
-
       <header className="hero-section shadow-sm py-5 text-center">
         <div className="hero-bg-circle" style={{ top: '-50px', left: '-50px' }}></div>
         <div className="hero-bg-circle" style={{ bottom: '-50px', right: '-50px', background: 'var(--secondary-gradient)' }}></div>
@@ -95,8 +94,6 @@ function Vitrine() {
                 </div>
               </div>
             </div>
-
-
             <div className="row">
               {produtosFiltrados.map(product => (
                 <ProductCard

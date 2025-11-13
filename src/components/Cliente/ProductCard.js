@@ -28,7 +28,10 @@ function ProductCard({ product, onAdd }) {
     <div className="col-12 col-sm-6 col-md-4 col-lg-3 mb-4 animate-fade-in">
       <div className="card h-100 product-card-modern">
 
+
         {/*imagem com efeito rocheda*/}
+
+
         <div className="product-image-wrapper">
           <img src={imageUrl} className="product-image-modern" alt={nome} />
         </div>
