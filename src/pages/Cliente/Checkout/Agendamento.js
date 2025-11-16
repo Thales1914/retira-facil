@@ -1,28 +1,42 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-const mockSlots = [
-  { day: 'Quinta-Feira, 14/11', slots: [
-    { time: '09:00', available: true }, 
-    { time: '10:00', available: false }, 
-    { time: '14:00', available: true }, 
-    { time: '16:00', available: true }, 
-  ]},
-  { day: 'Sexta-Feira, 15/11', slots: [
-    { time: '09:00', available: true }, 
-    { time: '11:00', available: true }, 
-    { time: '14:00', available: true }, 
-  ]}
-];
+const API_URL = 'http://localhost:5000/api';
 
 function Agendamento() {
   const [selectedSlot, setSelectedSlot] = useState(null);
   const navigate = useNavigate();
+  const [availableSlots, setAvailableSlots] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchSlots = async () => {
+      try {
+        const response = await fetch(`${API_URL}/horarios`);
+        if (!response.ok) {
+          throw new Error('Falha ao buscar horários da API');
+        }
+        const data = await response.json();
+        
+        const formattedSlots = data.map(slot => ({
+          time: slot.hora_inicio.substring(0, 5),
+          available: true
+        }));
+
+        setAvailableSlots(formattedSlots);
+        setLoading(false);
+
+      } catch (error) {
+        console.error("Erro no Agendamento.js:", error);
+        setLoading(false);
+      }
+    };
+
+    fetchSlots();
+  }, []);
 
   const handleContinue = () => {
     if (selectedSlot) {
-      // AQUI É ONDE NEGO VACILA:
-      // Navegamos para a próxima tela levando o objeto 'selectedSlot' na bagagem (state)
       navigate('/finalizar', { state: { agendamento: selectedSlot } });
     }
   };
@@ -39,33 +53,42 @@ function Agendamento() {
       </div>
 
       <div className="container" style={{ maxWidth: '800px' }}>
-        {mockSlots.map((dayGroup, index) => (
-          <div key={index} className="card mb-4 border-0 shadow-sm">
+        {loading ? (
+          <div className="text-center py-5">
+            <div className="spinner-border text-primary" role="status">
+              <span className="visually-hidden">Carregando...</span>
+            </div>
+          </div>
+        ) : (
+          <div className="card mb-4 border-0 shadow-sm">
             <div className="card-header bg-white fw-bold text-uppercase text-muted">
-              📅 {dayGroup.day}
+              📅 Horários Disponíveis
             </div>
             <div className="card-body">
               <div className="d-flex flex-wrap gap-2">
-                {dayGroup.slots.map((slot) => {
-                  const isSelected = selectedSlot?.day === dayGroup.day && selectedSlot?.time === slot.time;
+                {availableSlots.map((slot) => {
+                  const isSelected = selectedSlot?.time === slot.time;
                   
                   return (
                     <button
                       key={slot.time}
                       disabled={!slot.available}
-                      onClick={() => setSelectedSlot({ day: dayGroup.day, time: slot.time })}
+                      onClick={() => setSelectedSlot({ day: 'Hoje', time: slot.time })}
                       className={`btn ${isSelected ? 'btn-primary' : 'btn-outline-secondary'} 
                         ${!slot.available ? 'opacity-50' : ''} px-4 py-2`}
                     >
                       {slot.time}
-                      {!slot.available && <small className="d-block" style={{fontSize: '0.6rem'}}>Esgotado</small>}
                     </button>
                   );
                 })}
+
+                {availableSlots.length === 0 && (
+                   <p className="text-muted">Nenhum horário disponível no momento.</p>
+                )}
               </div>
             </div>
           </div>
-        ))}
+        )}
 
         
         <div className="fixed-bottom bg-white p-3 shadow border-top">

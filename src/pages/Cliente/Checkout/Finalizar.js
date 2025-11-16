@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import CartController from '../../../controllers/CartController';
 
+const API_URL = 'http://localhost:5000/api';
+
 function Finalizar() {
   const location = useLocation();
   const navigate = useNavigate();
@@ -21,7 +23,6 @@ function Finalizar() {
       return;
     }
 
-    // Carrega o carrinho REAL
     CartController.getCart().then(items => {
       setCartItems(items);
       const sum = items.reduce((acc, item) => acc + (item.product.preco * item.quantity), 0);
@@ -33,14 +34,45 @@ function Finalizar() {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    // Aqui você mandaria para o Back-end
-    console.log("PEDIDO FEITO!", { usuario: formData, itens: cartItems, agendamento });
-    
-    // Vamos criar uma função de limpar carrinho no próximo passo, 
-    // por enquanto vamos só navegar para o sucesso
+  const handleSubmit = async (e) => {
+  e.preventDefault();
+
+  const dataDeHoje = new Date().toISOString().split('T')[0];
+
+  const agendamentoCorrigido = {
+    ...agendamento,
+    day: agendamento.day === 'Hoje' ? dataDeHoje : agendamento.day 
+  };
+
+  const pedidoData = {
+    usuario: formData,
+    itens: cartItems,
+    agendamento: agendamentoCorrigido
+  };
+
+  try {
+    const response = await fetch(`${API_URL}/pedidos`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(pedidoData),
+    });
+
+    if (!response.ok) {
+      throw new Error('Falha ao criar o pedido.');
+    }
+
+    const result = await response.json();
+    console.log('Pedido criado com sucesso!', result);
+
+    await CartController.clearCart();
     navigate('/confirmacao');
+
+  } catch (error) {
+    console.error("Erro ao finalizar pedido:", error);
+    alert("Erro ao enviar seu pedido. Tente novamente.");
+    }
   };
 
   return (

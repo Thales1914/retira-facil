@@ -3,12 +3,16 @@ const express = require('express');
 const cors = require('cors');
 const db = require('./src/config/db.js');
 const productRoutes = require('./src/routes/productRoutes');
+const scheduleRoutes = require('./src/routes/scheduleRoutes');
+const orderRoutes = require('./src/routes/orderRoutes.js');
 
 const app = express();
 
 app.use(cors());
 app.use(express.json());
 app.use('/api', productRoutes);
+app.use('/api', scheduleRoutes);
+app.use('/api', orderRoutes);
 
 app.get('/', (req, res) => {
   res.json({ message: 'API do Retira Fácil está funcionando, seu lerdo.' });
